@@ -1,7 +1,7 @@
 use actix_web::{get, web::ServiceConfig};
 use shuttle_actix_web::ShuttleActixWeb;
 use shuttle_runtime::CustomError;
-use sqlx::PgPool;
+use sqlx::{Executor, PgPool};
 use dotenv::dotenv;
 
 #[get("/")]
@@ -13,10 +13,15 @@ async fn hello_world() -> &'static str {
 async fn main() -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
 
     dotenv().ok();
+
     let db_url = std::env::var("DATABASE_URL")
-        .expect("DATABASE_URL is not set in environmental variables!");   
+        .expect("DATABASE_URL is not set in environmental variables!");
 
     let db_connetion = PgPool::connect(&db_url)
+        .await
+        .map_err(CustomError::new)?;
+
+    db_connetion.execute(include_str!("../../migrations/schema.sql"))
         .await
         .map_err(CustomError::new)?;
 
