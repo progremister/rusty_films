@@ -3,7 +3,7 @@ use shuttle_actix_web::ShuttleActixWeb;
 use shuttle_runtime::CustomError;
 use shuttle_secrets::SecretStore;
 use sqlx::{Executor, PgPool};
-use api_lib::health::{hello_world, display_version};
+use api_lib::health::health;
 
 #[shuttle_runtime::main]
 async fn main(
@@ -26,8 +26,7 @@ async fn main(
 
     let config = move |cfg: &mut ServiceConfig| {
         cfg.app_data(pool)
-            .service(hello_world)
-            .service(display_version);
+            .service(health);
     };
 
     Ok(config.into())
