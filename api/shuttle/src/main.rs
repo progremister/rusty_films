@@ -1,31 +1,14 @@
-use actix_web::{get, web::ServiceConfig};
+use actix_web::web::ServiceConfig;
 use shuttle_actix_web::ShuttleActixWeb;
 use shuttle_runtime::CustomError;
 use shuttle_secrets::SecretStore;
 use sqlx::{Executor, PgPool};
-
-#[get("/")]
-async fn hello_world() -> &'static str {
-    "Hello World!"
-}
-
-#[get("/version")]
-async fn display_version(db: actix_web::web::Data<sqlx::PgPool>) -> String {
-    tracing::info!("Getting version");
-    let result: Result<String, sqlx::Error> = sqlx::query_scalar("SELECT version()")
-        .fetch_one(db.get_ref())
-        .await;
-
-    match result {
-        Ok(version) => version,
-        Err(e) => format!("Error: {:?}", e),
-    }
-}
+use api_lib::health::{hello_world, display_version};
 
 #[shuttle_runtime::main]
 async fn main(
     #[shuttle_secrets::Secrets] secret_store: SecretStore
-) -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
+             ) -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
 
     let db_url = secret_store
         .get("DATABASE_URL")
