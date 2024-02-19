@@ -1,8 +1,8 @@
 use actix_web::{get, web::ServiceConfig};
 use shuttle_actix_web::ShuttleActixWeb;
 use shuttle_runtime::CustomError;
+use shuttle_secrets::SecretStore;
 use sqlx::{Executor, PgPool};
-use dotenv::dotenv;
 
 #[get("/")]
 async fn hello_world() -> &'static str {
@@ -22,12 +22,13 @@ async fn display_version(db: actix_web::web::Data<sqlx::PgPool>) -> String {
 }
 
 #[shuttle_runtime::main]
-async fn main() -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
+async fn main(
+    #[shuttle_secrets::Secrets] secret_store: SecretStore
+) -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
 
-    dotenv().ok();
-
-    let db_url = std::env::var("DATABASE_URL")
-        .expect("DATABASE_URL is not set in environmental variables!");
+    let db_url = secret_store
+        .get("DATABASE_URL")
+        .expect("Secret was not found: DATABASE_URL");
 
     let db_connetion = PgPool::connect(&db_url)
         .await
@@ -41,8 +42,8 @@ async fn main() -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clon
 
     let config = move |cfg: &mut ServiceConfig| {
         cfg.app_data(pool)
-           .service(hello_world)
-           .service(display_version);
+            .service(hello_world)
+            .service(display_version);
     };
 
     Ok(config.into())
