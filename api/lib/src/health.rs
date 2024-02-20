@@ -7,7 +7,7 @@ pub fn service(cfg: &mut ServiceConfig) {
     cfg.route("/health", web::get().to(health));
 }
 
-const API_VERSION: &str = "0.0.1";
+pub const API_VERSION: &str = "0.0.1";
 
 async fn health() -> HttpResponse {
     HttpResponse::Ok()
