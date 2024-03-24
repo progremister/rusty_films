@@ -7,5 +7,8 @@ edition = "2021"
 # actix
 actix-web = "4.3.1"
 
+# shared
+shared = { path = "../../shared" }
+
 [dev-dependencies]
 actix-rt = "2.9.0"
