@@ -262,19 +262,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "080e9890a082662b09c1ad45f567faeeb47f22b5fb23895fbe1e651e718e25ca"
 
 [[package]]
-name = "api-lib"
-version = "0.1.0"
-dependencies = [
- "actix-rt",
- "actix-web",
-]
-
-[[package]]
 name = "api-shuttle"
 version = "0.1.0"
 dependencies = [
  "actix-web",
- "api-lib",
+ "api_lib",
  "serde",
  "shuttle-actix-web",
  "shuttle-runtime",
@@ -283,6 +275,14 @@ dependencies = [
  "sqlx",
  "tokio",
  "tracing",
+]
+
+[[package]]
+name = "api_lib"
+version = "0.1.0"
+dependencies = [
+ "actix-rt",
+ "actix-web",
 ]
 
 [[package]]

@@ -1,5 +1,5 @@
 [package]
-name = "api-lib"
+name = "api_lib"
 version = "0.1.0"
 edition = "2021"
 
