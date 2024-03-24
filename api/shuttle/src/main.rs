@@ -6,7 +6,7 @@ use sqlx::{Executor, PgPool};
 #[shuttle_runtime::main]
 async fn main(
     #[shuttle_runtime::Secrets] secret_store: SecretStore
-    ) -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static>{
+    ) -> ShuttleActixWeb<impl FnOnce(&mut ServiceConfig) + Send + Clone + 'static> {
 
     let db_url = secret_store
         .get("DATABASE_URL")
