@@ -270,6 +270,7 @@ dependencies = [
  "serde",
  "shuttle-actix-web",
  "shuttle-runtime",
+ "shuttle-secrets",
  "shuttle-shared-db",
  "sqlx",
  "tokio",
@@ -2294,6 +2295,17 @@ dependencies = [
  "tokio-stream",
  "tonic",
  "tracing-subscriber",
+]
+
+[[package]]
+name = "shuttle-secrets"
+version = "0.42.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "df461c61fcae7501a66fdca5fdc97134a7addc38632555b7ea6bdb3a4a4d6921"
+dependencies = [
+ "async-trait",
+ "serde_json",
+ "shuttle-service",
 ]
 
 [[package]]
